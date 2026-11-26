@@ -233,10 +233,24 @@ const OrderDetails = () => {
             if (contentType.includes('text/html')) {
                 const newWindow = window.open('', '_blank');
                 if (newWindow) {
+                    // Show the report first, with a print button on top (hidden when printing).
+                    const toolbar = `
+                        <style>
+                            @media print { .report-toolbar { display: none !important; } }
+                            .report-toolbar { position: sticky; top: 0; z-index: 10; display: flex; justify-content: center; gap: 12px;
+                                padding: 12px; background: #f5f5f5; border-bottom: 1px solid #ddd; font-family: Arial, sans-serif; }
+                            .report-toolbar button { padding: 8px 22px; font-size: 15px; border: none; border-radius: 6px; cursor: pointer; }
+                            .report-toolbar .print { background: #0d6efd; color: #fff; }
+                            .report-toolbar .close { background: #e0e0e0; color: #333; }
+                        </style>
+                        <div class="report-toolbar" dir="rtl">
+                            <button class="print" onclick="window.print()">طباعة</button>
+                            <button class="close" onclick="window.close()">إغلاق</button>
+                        </div>`;
                     newWindow.document.open();
-                    newWindow.document.write(response.data);  // Directly write response data to the new window
-                    newWindow.print();  // Triggers the print dialog in the new window
-                    newWindow.close();
+                    newWindow.document.write(toolbar + response.data);
+                    newWindow.document.title = 'تقرير الطلب ' + orderData.Reference;
+                    newWindow.document.close();
                 } else {
                     console.error('Failed to open a new window. It may be blocked by a popup blocker.');
                 }
@@ -254,8 +268,8 @@ const OrderDetails = () => {
             return 'cake';
         } else if (searchUserRole('hala arabi')) {
             return 'hala arabi';
-        } else if (searchUserRole('hala coffee')) {
-            return 'hala coffee';
+        } else if (searchUserRole('hala coffe')) {
+            return 'hala coffe';
         } else if (searchUserRole('fatayer')) {
             return 'fatayer';
         } else if (searchUserRole('red & chocolate')) {

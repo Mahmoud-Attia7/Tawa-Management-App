@@ -13,8 +13,9 @@
 
         public function __construct() {
             $this->jasper = new PHPJasper;
-            $this->inputJRXML = __DIR__ . '/vendor/geekcom/phpjasper/jasper reports/OrderDetails.jrxml';
-            $this->inputJasper = __DIR__ . '/vendor/geekcom/phpjasper/jasper reports/OrderDetails.jasper';  
+            // The report design lives in the repo; jasperstarter compiles the .jrxml when it runs.
+            $this->inputJRXML = __DIR__ . '/reports/OrderDetails.jrxml';
+            $this->inputJasper = $this->inputJRXML;
             $this->output = __DIR__ . '/vendor/geekcom/phpjasper/jasper reports';    
         }
 
@@ -23,6 +24,10 @@
         }
 
         public function Execute_Report($userID, $masterID, $Reference, $department){
+            // Users who don't belong to one production department see every department.
+            if ($department === null || $department === '') {
+                $department = 'all';
+            }
             $db = require __DIR__ . '/../../config/db_settings.php';
             $outputWithFileName = $this->output . '/OrderDetailsReport' . $userID;
             $options = [ 

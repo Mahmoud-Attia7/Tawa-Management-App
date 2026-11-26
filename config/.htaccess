@@ -1,0 +1,5 @@
+# Config files are only used by PHP on the server; never serve them to browsers.
+Require all denied
+<IfModule !mod_authz_core.c>
+    Deny from all
+</IfModule>

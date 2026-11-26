@@ -4,6 +4,7 @@ import axios from 'axios';
 import ShowUserTable from '../component/Table/ShowUsers';
 import NewUserModal from '../component/Modal/NewUser';
 import { useUser } from '../component/UserContext';
+import { API_BASE } from '../apiConfig';
 
 
 
@@ -34,7 +35,7 @@ const Users = () => {
             return;
         }
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             handleClose();
             fetchUsers();
         } catch (error) {
@@ -59,7 +60,7 @@ const Users = () => {
 
     const fetchUsers = async ()=>{
         try{
-            const userDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const userDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setUsers(userDataResponse.data[0]);
         }
         catch(error){

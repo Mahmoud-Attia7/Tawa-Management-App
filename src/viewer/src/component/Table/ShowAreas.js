@@ -3,6 +3,7 @@ import { Button, Table } from 'react-bootstrap';
 import axios from 'axios';
 import ModifyAreaModal from '../Modal/ModifyArea';
 import { useUser } from '../UserContext';
+import { API_BASE } from '../../apiConfig';
 
 
 const ShowAreaTable = ( {fetchAreas, areas, saveAreaData, showModal, handleClose, handleShow} ) => {
@@ -20,7 +21,7 @@ const ShowAreaTable = ( {fetchAreas, areas, saveAreaData, showModal, handleClose
         };
   
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             fetchAreas();
         } catch (error) {
             console.error('Error deleting item:', error);

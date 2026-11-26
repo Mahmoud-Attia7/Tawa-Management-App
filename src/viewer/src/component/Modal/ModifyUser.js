@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 const ModifyUserModal = ( { user, showModal, handleClose, submitUserData, saveUserData} ) =>{
     const [userData, setUserData] = useState({
         ...user,
+        userPassword: '',
         flag: 'update'
     })
 
@@ -29,7 +30,7 @@ const ModifyUserModal = ( { user, showModal, handleClose, submitUserData, saveUs
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label className="d-flex justify-content-end">كلمة السر</Form.Label>
-                        <Form.Control type="text" value={userData.userPassword} onChange={(event)=>handelData('userPassword', event)} />
+                        <Form.Control type="password" placeholder="اتركها فارغة للإبقاء على كلمة السر الحالية" value={userData.userPassword} onChange={(event)=>handelData('userPassword', event)} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label className="d-flex justify-content-end">رقم الهاتف</Form.Label>

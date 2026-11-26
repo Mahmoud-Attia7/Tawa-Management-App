@@ -1,4 +1,6 @@
 /src/model/vendor/
 node_modules/
 /src/viewer/build/
+/deploy/
+/config/db_production.php
 .env

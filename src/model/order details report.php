@@ -23,6 +23,7 @@
         }
 
         public function Execute_Report($userID, $masterID, $Reference, $department){
+            $db = require __DIR__ . '/../../config/db_settings.php';
             $outputWithFileName = $this->output . '/OrderDetailsReport' . $userID;
             $options = [ 
                 'format' => ['html'],
@@ -33,11 +34,11 @@
                 ],
                 'db_connection' => [
                     'driver' => 'mysql',
-                    'username' => 'root',
-                    'password' => '',
-                    'host' => 'localhost',
-                    'port' => '3306',
-                    'database' => 'tawa_management_application',
+                    'username' => $db['username'],
+                    'password' => $db['password'],
+                    'host' => $db['host'],
+                    'port' => $db['port'],
+                    'database' => $db['database'],
                 ]
             ];
             $this->jasper->process($this->inputJasper, $outputWithFileName, $options)->execute();

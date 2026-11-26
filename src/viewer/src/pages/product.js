@@ -5,6 +5,7 @@ import axios from 'axios';
 import NewProductModal from '../component/Modal/NewProduct';
 import ShowProducTable from '../component/Table/ShowProducts';
 import { useUser } from '../component/UserContext';
+import { API_BASE } from '../apiConfig';
 
 
 
@@ -25,7 +26,7 @@ const Product = () => {
 
     const fetchCategories = async ()=>{
         try{
-            const areaDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const areaDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setCategories(areaDataResponse.data[5]);
         }
         catch(error){
@@ -35,7 +36,7 @@ const Product = () => {
 
     const fetchProducts = async ()=>{
         try{
-            const productDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const productDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setProducts(productDataResponse.data[3]);
         }
         catch(error){
@@ -55,7 +56,7 @@ const Product = () => {
             return;
         }
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             handleClose();
             fetchProducts();
         } catch (error) {

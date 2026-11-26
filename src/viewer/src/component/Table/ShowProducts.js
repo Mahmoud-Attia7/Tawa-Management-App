@@ -6,6 +6,7 @@ import ModifyAreaModal from '../Modal/ModifyArea';
 import ModifyBranchModal from '../Modal/ModifyBranch';
 import { useUser } from '../UserContext';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../../apiConfig';
 
 
 const ShowProducTable = ({ userRoles, searchUserRole, fetchProducts, products, saveProductData, showModal, handleClose, handleShow }) => {
@@ -26,7 +27,7 @@ const ShowProducTable = ({ userRoles, searchUserRole, fetchProducts, products, s
         };
   
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             fetchProducts();
         } catch (error) {
             console.error('Error deleting item:', error);

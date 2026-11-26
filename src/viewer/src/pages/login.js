@@ -3,6 +3,7 @@ import { Container, Form, Button, Card } from 'react-bootstrap';
 import { useUser } from '../component/UserContext';
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import { API_BASE } from '../apiConfig';
 
 const LoginPage = () => {
   const { setRoles, authorize, setUserAuthenticateData } = useUser();
@@ -38,7 +39,7 @@ const LoginPage = () => {
     }
 
     try {
-      const userResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', userSignInData);
+      const userResponse = await axios.post(API_BASE + '/src/controller/person.php', userSignInData);
       if (typeof userResponse.data !== typeof 'string') {
         authorize(true);
         setUserAuthenticateData(userResponse.data[1]);

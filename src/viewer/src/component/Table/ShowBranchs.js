@@ -5,6 +5,7 @@ import axios from 'axios';
 import ModifyAreaModal from '../Modal/ModifyArea';
 import ModifyBranchModal from '../Modal/ModifyBranch';
 import { useUser } from '../UserContext';
+import { API_BASE } from '../../apiConfig';
 
 
 const ShowBranchTable = ( {fetchBranchs, branchs, saveBranchData, showModal, handleClose, handleShow, areas} ) => {
@@ -19,7 +20,7 @@ const ShowBranchTable = ( {fetchBranchs, branchs, saveBranchData, showModal, han
         };
   
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             fetchBranchs();
         } catch (error) {
             console.error('Error deleting item:', error);

@@ -1,42 +1,22 @@
 <?php
     require_once('../../config/database_quereies.php');
 
-
-
-
     class Stuff
     {
         private $quere;
-        public function __construct()
-        {
-            $this->quere = new Quere();
-        }
+        public function __construct() { $this->quere = new Quere(); }
+
         public function Insert_Stuff($name){
-                $tableName = 'stuffing';
-                $columns = '(`name`)';
-                $data = "('$name')";
-                $status = $this->quere->InsertInto($tableName, $columns, $data);
-                return $status;
+            return $this->quere->InsertInto('stuffing', ['name' => $name]);
         }
-        
         public function Update_Stuff_Data($name, $ID){
-                $tableName = 'stuffing';
-                $columnsANDdata = "`name`='$name'";
-                $condition = "WHERE `ID` = '$ID'";
-                $status = $this->quere->Update($tableName, $columnsANDdata, $condition);
-                return $status;
+            return $this->quere->Update('stuffing', ['name' => $name], ['ID' => $ID]);
         }
         public function Delete_Stuff($ID){
-                $tableName = 'stuffing';
-                $condition = "WHERE `ID` = '$ID'";
-                $status = $this->quere->Delete($tableName, $condition);
-                return $status;
+            return $this->quere->Delete('stuffing', ['ID' => $ID]);
         }
-
         public function Get_Stuff(){
-                $tableUser = 'stuffing';
-                $rows = $this->quere->SelectAll($tableUser);
-                return $rows;
+            return $this->quere->SelectAll('stuffing');
         }
-    }    
+    }
 ?>

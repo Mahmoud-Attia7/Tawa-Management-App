@@ -9,6 +9,7 @@ import InsertItem from '../component/Form/InsertItem';
 import OrderHeader from '../component/Form/OrderHeader';
 import { useUser } from '../component/UserContext';
 import ModifyOrderModal from '../component/Modal/ModifyOrder';
+import { API_BASE } from '../apiConfig';
 
 
 const OrderDetails = () => {
@@ -30,7 +31,7 @@ const OrderDetails = () => {
  
     const fetchData = async () => {
         try {
-            const orderResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const orderResponse = await axios.get(API_BASE + '/src/controller/person.php');
             if (state === 'new') {
                 updateOrder(orderResponse.data[2][0]);
                 fetchItems(orderResponse.data[2][0].ID);
@@ -52,7 +53,7 @@ const OrderDetails = () => {
             flag: 'get items'
         };
         try {
-            const itemsResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            const itemsResponse = await axios.post(API_BASE + '/src/controller/person.php', data);
             setItems(itemsResponse.data);
         } catch (error) {
             console.error('Error fetching items:', error);
@@ -65,7 +66,7 @@ const OrderDetails = () => {
                 userID: userID,
                 flag: 'get user branches'
             }
-            const userBranchesDataResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            const userBranchesDataResponse = await axios.post(API_BASE + '/src/controller/person.php', data);
             setUserBranches(userBranchesDataResponse.data);
         }
         catch(error){
@@ -151,7 +152,7 @@ const OrderDetails = () => {
                 status: status
             }
             console.log(data);
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data)
+            await axios.post(API_BASE + '/src/controller/person.php', data)
             updateOrder(data);
             fetchData();
         }
@@ -188,14 +189,14 @@ const OrderDetails = () => {
             flag: 'Submited',
             status: status
         }
-        await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data)
+        await axios.post(API_BASE + '/src/controller/person.php', data)
         updateOrder(data);
         fetchData();
     }
 
     const SaveOrderData = async (data) => {
         try{
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             updateOrder(data);
         }catch(error){
             console.error("Error submitting your order due:", error);
@@ -222,7 +223,7 @@ const OrderDetails = () => {
         };
     
         try {
-            const response = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data, {
+            const response = await axios.post(API_BASE + '/src/controller/person.php', data, {
                 responseType: 'html'  // Ensures response is treated as plain text
             });
     

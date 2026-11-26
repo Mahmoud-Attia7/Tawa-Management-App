@@ -1,51 +1,25 @@
-<?php 
+<?php
     require_once('../../config/database_quereies.php');
 
-
     class User_Role
-        {
-            private $quere;
+    {
+        private $quere;
+        public function __construct() { $this->quere = new Quere(); }
 
-            public function __construct(){
-                $this->quere = new Quere();
-            }
-
-            public function Insert_User_Role($userID, $roleID, $isAvailable, $roleName){
-                    $tableName = 'user_role';
-                    $columns = '(`userID`, `roleID`, `isAvailable`, `roleName`)';
-                    $data = "($userID, $roleID, $isAvailable, '$roleName')";
-                    $status = $this->quere->InsertInto($tableName, $columns, $data);
-                    return $status;
-            }
-            
-            public function Update_User_Role($userID, $roleID, $isAvailable){
-                $tableName = 'user_role';
-                $columnsANDdata = " `isAvailable` = $isAvailable";
-                $condition = "WHERE `userID` = $userID AND `roleID` = $roleID";
-                $status = $this->quere->Update($tableName, $columnsANDdata, $condition);
-                return $status;
-            }
-
-            public function Delete_User_Roles($userID){
-                $tableName = 'user_role';
-                $condition = "WHERE `userID` = $userID";
-                $status = $this->quere->Delete($tableName, $condition);
-                return $status;
-            }
-            public function Get_User_Roles_By_ID($userID){
-                $tableName = 'user_role';
-                $columns = '*';
-                $condition = "WHERE `userID` = '$userID'";
-                $rows = $this->quere->SelectFromTableByCondition($tableName, $columns, $condition);
-                return $rows; 
-            }
-
-            public function Get_User_Role(){
-                $tableName = 'user_role';
-                $rows = $this->quere->SelectAll($tableName);
-                    return $rows;
-            }
-
-
+        public function Insert_User_Role($userID, $roleID, $isAvailable, $roleName){
+            return $this->quere->InsertInto('user_role', ['userID' => $userID, 'roleID' => $roleID, 'isAvailable' => $isAvailable, 'roleName' => $roleName]);
         }
+        public function Update_User_Role($userID, $roleID, $isAvailable){
+            return $this->quere->Update('user_role', ['isAvailable' => $isAvailable], ['userID' => $userID, 'roleID' => $roleID]);
+        }
+        public function Delete_User_Roles($userID){
+            return $this->quere->Delete('user_role', ['userID' => $userID]);
+        }
+        public function Get_User_Roles_By_ID($userID){
+            return $this->quere->SelectWhere('user_role', '*', ['userID' => $userID]);
+        }
+        public function Get_User_Role(){
+            return $this->quere->SelectAll('user_role');
+        }
+    }
 ?>

@@ -7,6 +7,7 @@ import { useUser } from '../component/UserContext';
 import axios from 'axios';
 import NewOrderModal from '../component/Modal/NewOrder';
 import ShowOrderTable from '../component/Table/ShowOrders';
+import { API_BASE } from '../apiConfig';
 
 const NewOrderPage = () => {
     const [showModal, setShowModal] = useState(false);
@@ -35,7 +36,7 @@ const NewOrderPage = () => {
 
     const fetchOrders = async ()=>{
         try{
-            const orderDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const orderDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             FilterOrders(orderDataResponse.data[1]);
         }
         catch(error){
@@ -46,7 +47,7 @@ const NewOrderPage = () => {
     const submitOrder = async (data) => {
         console.log(data);
         try{
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             setState('new');
             updateOrder(data);
             navigate("/pages/insertItems");
@@ -62,7 +63,7 @@ const NewOrderPage = () => {
                 userID: userID,
                 flag: 'get user branches'
             }
-            const userBranchesDataResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            const userBranchesDataResponse = await axios.post(API_BASE + '/src/controller/person.php', data);
             setUserBranches(userBranchesDataResponse.data);
         }
         catch(error){

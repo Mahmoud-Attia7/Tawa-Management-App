@@ -5,6 +5,7 @@ import axios from 'axios';
 import NewBranchModal from '../component/Modal/NewBranch';
 import ShowBranchTable from '../component/Table/ShowBranchs';
 import { useUser } from '../component/UserContext';
+import { API_BASE } from '../apiConfig';
 
 
 const Branch = () => {
@@ -20,7 +21,7 @@ const Branch = () => {
    
     const fetchBranchesAndAreas = async ()=>{
         try{
-            const branchDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const branchDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setBranches(branchDataResponse.data[7]);
             setAreas(branchDataResponse.data[8]);
         }
@@ -38,7 +39,7 @@ const Branch = () => {
         } 
         
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             handleClose();
             fetchBranchesAndAreas();
             console.log(data)

@@ -1,6 +1,7 @@
 import { Form, Button, Card } from 'react-bootstrap';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE } from '../../apiConfig';
 
 const InsertItem = ({ products, MasterID, fetchItems }) => {
     const [itemData, setItemData] = useState({
@@ -30,7 +31,7 @@ const InsertItem = ({ products, MasterID, fetchItems }) => {
                 ...itemData,
                 masterID: MasterID
             };
-            await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', data);
+            await axios.post(API_BASE + '/src/model/order.php', data);
             fetchItems(MasterID);
             setItemData({
                 'productID': '',

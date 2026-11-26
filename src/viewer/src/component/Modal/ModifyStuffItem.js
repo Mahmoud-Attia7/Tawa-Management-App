@@ -2,6 +2,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
+import { API_BASE } from '../../apiConfig';
 
 
 
@@ -19,7 +20,7 @@ const StuffedItemModal = ( { status, hours, isBranch, showModal, handleClose, mo
             itemID: modifyItemData.iID,
             flag: 'get'
             }
-            const response = await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', data);
+            const response = await axios.post(API_BASE + '/src/model/order.php', data);
             if (response.data[0] == null) {
                 setStuffingItem( 
                     {

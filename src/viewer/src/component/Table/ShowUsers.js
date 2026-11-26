@@ -4,6 +4,7 @@ import axios from 'axios';
 import ModifyUserModal from '../Modal/ModifyUser';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext';
+import { API_BASE } from '../../apiConfig';
 
 const ShowUserTable = ( {fetchUsers, users, saveUserData, showModal, handleClose, handleShow} ) => {
     const [editUser, setEditUser] = useState([]);
@@ -24,7 +25,7 @@ const ShowUserTable = ( {fetchUsers, users, saveUserData, showModal, handleClose
         };
   
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting item:', error);

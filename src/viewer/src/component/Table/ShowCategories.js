@@ -5,6 +5,7 @@ import axios from 'axios';
 import ModifyAreaModal from '../Modal/ModifyArea';
 import ModifyCategoryModal from '../Modal/ModifyCategory';
 import { useUser } from '../UserContext';
+import { API_BASE } from '../../apiConfig';
 
 
 const ShowCategoryTable = ( {fetchCategories, categories, saveCategoryData, showModal, handleClose, handleShow} ) => {
@@ -22,7 +23,7 @@ const ShowCategoryTable = ( {fetchCategories, categories, saveCategoryData, show
         };
 
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             fetchCategories();
         } catch (error) {
             console.error('Error deleting item:', error);

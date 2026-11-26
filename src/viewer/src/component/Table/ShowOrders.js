@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext';
 import OrderDetails from '../../pages/OrderDetails';
+import { API_BASE } from '../../apiConfig';
 
 
 const ShowOrderTable = ({ fetchOrders, userBranches, orders, saveOrderData, showModal, handleClose, handleShow, searchUserRole }) => {
@@ -50,7 +51,7 @@ const ShowOrderTable = ({ fetchOrders, userBranches, orders, saveOrderData, show
                 status: status
             }
             console.log(data);
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data)
+            await axios.post(API_BASE + '/src/controller/person.php', data)
             fetchOrders();
         }
         else{

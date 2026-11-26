@@ -4,6 +4,7 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import ModifyUserModal from '../component/Modal/ModifyUser';
+import { API_BASE } from '../apiConfig';
 
 
 
@@ -31,7 +32,7 @@ const UserDetails = () => {
                 userID: user.userID,
                 flag: 'getUserRoles'
             }
-            const userDataResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            const userDataResponse = await axios.post(API_BASE + '/src/controller/person.php', data);
             setUserRoles(userDataResponse.data);
         }
         catch(error){
@@ -47,7 +48,7 @@ const UserDetails = () => {
                 isAvailable:  isAvailable === 0 ? 1 : 0,
                 flag: 'updateUserRoles'
             }
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             fetchUserRole();
         }
         catch(error){
@@ -57,7 +58,7 @@ const UserDetails = () => {
 
     const fetchBranchs = async ()=>{
         try{
-            const branchDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const branchDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setBranches(branchDataResponse.data[7]);
         }
         catch(error){
@@ -71,7 +72,7 @@ const UserDetails = () => {
                 userID: userID,
                 flag: Flag
             }
-            const userBranchesDataResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            const userBranchesDataResponse = await axios.post(API_BASE + '/src/controller/person.php', data);
             if(Flag == 'get user branches'){
                 setUserBranches(userBranchesDataResponse.data);
             }
@@ -96,7 +97,7 @@ const UserDetails = () => {
 
     const fetchAreas = async ()=>{
         try{
-            const areaDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const areaDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setAreas(areaDataResponse.data[8]);
         }
         catch(error){
@@ -113,7 +114,7 @@ const UserDetails = () => {
                 isAvailable:  isAvailable,
                 flag: flag
             }
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             if(flag == 'update user area'){
                 const areaBranches = branches.filter(obj => obj['areaID'] === ID);
                 areaBranches.forEach(areaBranch => {
@@ -129,7 +130,7 @@ const UserDetails = () => {
     }
 
     const saveUserData = async (data) => {
-        if ( !data.employeeName || !data.userPassword || !data.phoneNumber || !data.email) {
+        if ( !data.employeeName || !data.phoneNumber || !data.email) {
             alert('جميع البيانات مطلوبة.');
             return;
         } 
@@ -146,7 +147,7 @@ const UserDetails = () => {
             return;
         }
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             handleClose();
             updateUser(data);
         } catch (error) {

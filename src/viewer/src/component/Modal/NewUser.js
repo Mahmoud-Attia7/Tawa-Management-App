@@ -33,7 +33,7 @@ const NewUserModal = ( {showModal, handleClose, submitUserData} ) =>{
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label className="d-flex justify-content-end">كلمة السر</Form.Label>
-                        <Form.Control type="text" onChange={(event)=>handelData('password', event)} />
+                        <Form.Control type="password" onChange={(event)=>handelData('password', event)} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label className="d-flex justify-content-end">رقم الهاتف</Form.Label>

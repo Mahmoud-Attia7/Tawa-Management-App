@@ -14,6 +14,10 @@
 
     // Set the content type for JSON
     header('Content-Type: application/json');
+
+    // Every request except sign-in needs a valid login token.
+    require_once('../../config/auth.php');
+    require_login();
     
     
     require_once('../model/user.php');
@@ -65,9 +69,12 @@
 
         public function Sign_In($email, $password){
             $userData = $this->User->Login($email, $password);
-            $ID = $userData['userID']; 
-            $userRoles = $this->user_role->Get_User_Roles_By_ID($ID);
-            return [$userRoles, $userData]; 
+            if ($userData === null) {
+                return null;
+            }
+            $userData['token'] = issue_token($userData['userID']);
+            $userRoles = $this->user_role->Get_User_Roles_By_ID($userData['userID']);
+            return [$userRoles, $userData];
         }
 
         public function Save_User($name, $password, $phone_number, $email, $role, $department){
@@ -87,6 +94,9 @@
 
         public function Remove_User($email){
             $userData = $this->User->Select_User($email);
+            if ($userData === null) {
+                return 'user not found';
+            }
             $this->user_role->Delete_User_Roles($userData['userID']);
             $userData = $this->User->Delete_User($email); 
             return $userData; 
@@ -117,7 +127,6 @@
         }
 
         public function Modify_Order($ID, $Reference, $UserID, $date, $branchID, $branchName, $clientName, $clientNumber, $isWidding, $guestNumber, $status, $submition_date, $employeeName){
-            echo $isWidding;
             return $this->Order->Update_Order($ID, $Reference, $UserID, $date, $branchID, $branchName, $clientName, $clientNumber, $isWidding, $guestNumber, $status, $submition_date, $employeeName);
         }
 
@@ -275,9 +284,9 @@
                 print_r($json_response);
         }
         elseif($data['flag'] == 'sign in'){
-                $UserLogin = $person->Sign_In($data['email'], $data['password']);
-                $json_response = json_encode([$UserLogin[0], $UserLogin[1]]);
-                print_r($json_response);
+                $UserLogin = $person->Sign_In($data['email'] ?? '', $data['password'] ?? '');
+                // A plain string response tells the login page the credentials were wrong.
+                echo json_encode($UserLogin === null ? 'Login failed' : $UserLogin);
         }
         elseif($data['flag'] == 'getUserRoles'){
             $UserRoles = $person->getUserRoles($data['userID']);
@@ -407,6 +416,7 @@
             echo($json_response);  
         }
         elseif ($data['flag'] == 'get orderDetails report') {
+            $data['userID'] = (int) $data['userID'];
             if ($person->Get_Order_Details_Report($data['userID'], $data['masterID'], $data['Reference'], $data['department'])) {
                 $filePath = __DIR__ . "/../model/vendor/geekcom/phpjasper/jasper reports/";
                 $fileName = "OrderDetailsReport" . $data['userID'] . ".html";

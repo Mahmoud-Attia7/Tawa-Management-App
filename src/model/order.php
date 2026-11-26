@@ -14,181 +14,121 @@
 
     // Set the content type for JSON
     header('Content-Type: application/json');
+
+    require_once('../../config/auth.php');
+    require_login();
     
 
     class Order
     {
         private $quere;
-        public function __construct()
-        {
-            $this->quere = new Quere();
-        }
+        public function __construct() { $this->quere = new Quere(); }
+
         public function Insert_Order($Reference, $UserID, $date, $branchID, $branchName, $clientName, $clientNumber, $isWidding, $guestNumber, $submition_date, $employeeName){
-            $tableOrder = 'order_master';
-            $columns = '(`Reference`, `UserID`, `date`, `branchID`, `branchName`,  `client_name`, `client_number`, `is_widding`, `guest_number`, `status`, `submition_date`, `employeeName`)';
-            $data = "('$Reference', $UserID,'$date', $branchID, '$branchName', '$clientName', $clientNumber, $isWidding, '$guestNumber','جديد', '$submition_date', '$employeeName')";
-            $status = $this->quere->InsertInto($tableOrder, $columns, $data);
-            return $status; 
+            return $this->quere->InsertInto('order_master', [
+                'Reference' => $Reference, 'UserID' => $UserID, 'date' => $date,
+                'branchID' => $branchID, 'branchName' => $branchName,
+                'client_name' => $clientName, 'client_number' => $clientNumber,
+                'is_widding' => $isWidding, 'guest_number' => $guestNumber,
+                'status' => 'جديد', 'submition_date' => $submition_date, 'employeeName' => $employeeName,
+            ]);
         }
-        
+
         public function Update_Order($ID, $Reference, $UserID, $date, $branchID, $branchName, $clientName, $clientNumber, $isWidding, $guestNumber, $status, $submition_date, $employeeName){
-            $tableOrder = 'order_master';
-            $columnsANDdata = "`Reference` = '$Reference', `status` = '$status'";
-            $condition = "WHERE ID = $ID";
-            $status = $this->quere->Update($tableOrder, $columnsANDdata, $condition);
-            return $status;
+            return $this->quere->Update('order_master', ['Reference' => $Reference, 'status' => $status], ['ID' => $ID]);
         }
 
-        public function Get_Barnch_Orders($branchID)
-        {
-            $tableOrder = 'order_master';
-            $columns = '*';
-            $condition = "WHERE `branchID` = '$branchID'";
-            $rows = $this->quere->SelectFromTableByCondition($tableOrder, $columns, $condition);
-            return $rows; 
+        public function Get_Barnch_Orders($branchID){
+            return $this->quere->SelectWhere('order_master', '*', ['branchID' => $branchID]);
         }
 
-        public function Get_Orders_Data()
-        {
-            $tableOrder = 'order_master';
-            $rows = $this->quere->SelectAll($tableOrder);
-            return $rows; 
+        public function Get_Orders_Data(){
+            return $this->quere->SelectAll('order_master');
         }
 
         public function Get_Last_Order(){
-            $tableOrder = 'order_master';
-            $columns = '*';
-            $condition = 'ORDER BY ID DESC LIMIT 1';
-            $rows = $this->quere->SelectFromTableByCondition($tableOrder, $columns, $condition);
-            return $rows; 
+            return $this->quere->SelectWhere('order_master', '*', [], 'ORDER BY ID DESC LIMIT 1');
         }
-        
+
         public function Insert_Item($MasterID, $Quantity, $productID){
-            $tableItems = 'order1';
-            $columns = '(`Quantity`, `MasterID`, `productID`)';
-            $data = "($Quantity, $MasterID, $productID)";
-            $status = $this->quere->InsertInto($tableItems, $columns, $data);
-            echo $status;
+            echo $this->quere->InsertInto('order1', ['Quantity' => $Quantity, 'MasterID' => $MasterID, 'productID' => $productID]);
         }
 
         public function Update_Item($pID, $Quantity){
-            $tableItems = 'order1';
-            $columnsANDdataTableItems = "`Quantity` = '$Quantity'";
-            $condition = "WHERE ID = $pID";
-            $status = $this->quere->Update($tableItems, $columnsANDdataTableItems, $condition);
-            return $status;
+            return $this->quere->Update('order1', ['Quantity' => $Quantity], ['ID' => $pID]);
         }
 
         public function Delete_Item($ID){
-            $tableItems = 'order1';
-            $condition = "WHERE `ID` = $ID";
-            $status = $this->quere->Delete($tableItems, $condition);
-            return $status;
+            return $this->quere->Delete('order1', ['ID' => $ID]);
         }
 
         public function Download($ID){
-            $tableItems = 'order1';
-            $columns = 'file_name';
-            $condition = "WHERE `ID` = $ID";
-            $status = $this->quere->SelectFromTableByCondition($tableItems, $columns, $condition);
-            return $status;
+            return $this->quere->SelectWhere('order1', '`file_name`', ['ID' => $ID]);
         }
 
         public function Get_Items_By_Master($MasterID){
-            $tableItems = 'order1';
-            $columns = 'order1.ID, order1.Quantity, order1.ProductID';
-            $condition = "WHERE `MasterID` = '$MasterID'";
-            $rows = $this->quere->SelectFromTableByCondition($tableItems, $columns, $condition);
-            return $rows; 
+            return $this->quere->SelectWhere('order1', '`ID`, `Quantity`, `ProductID`', ['MasterID' => $MasterID]);
         }
 
         public function Get_Stuffing(){
-            $tableProduct = 'stuffing';
-            $rows = $this->quere->SelectAll($tableProduct);
-            return $rows;
+            return $this->quere->SelectAll('stuffing');
         }
-        
+
         public function Get_Stuffs_By_Item($MasterID, $ItemID){
-            $tableStuffs = 'order2';
-            $columns = 'order2.stuff_one, order2.stuff_two, order2.stuff_three, order2.stuff_four, order2.stuff_five';
-            $condition = "WHERE `orderID` = '$MasterID' AND `productID` = '$ItemID'";
-            $rows = $this->quere->SelectFromTableByCondition($tableStuffs, $columns, $condition);
-            return $rows; 
+            return $this->quere->SelectWhere('order2', '`stuff_one`, `stuff_two`, `stuff_three`, `stuff_four`, `stuff_five`', ['orderID' => $MasterID, 'productID' => $ItemID]);
         }
 
         public function Insert_Item_Stuffing($oID, $pID, $stuff_one, $stuff_two, $stuff_three, $stuff_four, $stuff_five){
-            $tableStuffing = 'order2';
-            $columns = "(`orderID`, `productID`, `stuff_one`, `stuff_two`, `stuff_three`, `stuff_four`, `stuff_five`)";
-            $data = "($oID, $pID, '$stuff_one', '$stuff_two',  '$stuff_three',  '$stuff_four',  '$stuff_five')";
-            $rows = $this->quere->InsertInto($tableStuffing, $columns, $data);
-            return $rows;
-
+            return $this->quere->InsertInto('order2', [
+                'orderID' => $oID, 'productID' => $pID, 'stuff_one' => $stuff_one, 'stuff_two' => $stuff_two,
+                'stuff_three' => $stuff_three, 'stuff_four' => $stuff_four, 'stuff_five' => $stuff_five,
+            ]);
         }
+
         public function Delet_Item_Stuffs($oID){
-            $tableCakes = 'order2';
-            $condition = "WHERE `orderID` = '$oID'";
-            $status = $this->quere->Delete($tableCakes, $condition);
-            return $status;
+            return $this->quere->Delete('order2', ['orderID' => $oID]);
         }
 
         public function Update_Item_Stuffing($oID, $pID, $stuff_one, $stuff_two, $stuff_three, $stuff_four, $stuff_five){
-            $tableStuffing = 'order2';
-            $columnsANDdataTableStuffing = "`stuff_one` = '$stuff_one', `stuff_two` = '$stuff_two', `stuff_three` = '$stuff_three', `stuff_four` = '$stuff_four', `stuff_five` = '$stuff_five'";
-            $condition = "WHERE `orderID` = '$oID' AND `productID` = '$pID'";
-            $status = $this->quere->Update($tableStuffing, $columnsANDdataTableStuffing, $condition);
-            return $status;
+            return $this->quere->Update('order2', [
+                'stuff_one' => $stuff_one, 'stuff_two' => $stuff_two, 'stuff_three' => $stuff_three,
+                'stuff_four' => $stuff_four, 'stuff_five' => $stuff_five,
+            ], ['orderID' => $oID, 'productID' => $pID]);
         }
-        public function Insert_Cake_Properities($oID, $pID, $width, $height, $length, $layer, $stuff, $phrase){
-            $tableCakes = 'order3';
-            $columns = "(`orderID`, `productID`, `width`, `height`, `length`, `layer`, `stuff`, `phrase`)";
-            $data = "($oID, $pID, '$width', '$height',  '$length',  '$layer', '$stuff', '$phrase')";
-            $rows = $this->quere->InsertInto($tableCakes, $columns, $data);
-            return $rows;
 
+        public function Insert_Cake_Properities($oID, $pID, $width, $height, $length, $layer, $stuff, $phrase){
+            return $this->quere->InsertInto('order3', [
+                'orderID' => $oID, 'productID' => $pID, 'width' => $width, 'height' => $height,
+                'length' => $length, 'layer' => $layer, 'stuff' => $stuff, 'phrase' => $phrase,
+            ]);
         }
 
         public function Update_Item_Cake($pID, $shape, $levels){
-            $tableItems = 'order1';
-            $columnsANDdataTableItems = "`shape` = '$shape', `levels` = $levels , `Quantity` = 1";
-            $condition = "WHERE ID = $pID";
-            $status = $this->quere->Update($tableItems, $columnsANDdataTableItems, $condition);
-            return $status;
+            return $this->quere->Update('order1', ['shape' => $shape, 'levels' => $levels, 'Quantity' => 1], ['ID' => $pID]);
         }
-        
+
         public function Delet_Cake_Properity($oID, $pID){
-            $tableCakes = 'order3';
-            $condition = "WHERE `orderID` = '$oID' AND `productID` = '$pID'";
-            $status = $this->quere->Delete($tableCakes, $condition);
-            return $status;
+            return $this->quere->Delete('order3', ['orderID' => $oID, 'productID' => $pID]);
         }
+
         public function Delet_Cake_Properities($oID){
-            $tableCakes = 'order3';
-            $condition = "WHERE `orderID` = '$oID'";
-            $status = $this->quere->Delete($tableCakes, $condition);
-            return $status;
+            return $this->quere->Delete('order3', ['orderID' => $oID]);
         }
+
         public function Is_Cake_Exists($oID, $pID){
-            $tableCakes = 'order3';
-            $columns = 'true';
-            $condition = "WHERE `orderID` = '$oID' AND `productID` = '$pID'";
-            $state = $this->quere->SelectFromTableByCondition($tableCakes, $columns, $condition);
-            return $state[0]['true'];
+            $rows = $this->quere->SelectWhere('order3', 'COUNT(*) AS `n`', ['orderID' => $oID, 'productID' => $pID]);
+            return ((int) $rows[0]['n']) > 0 ? 1 : 0;
         }
 
         public function Get_Cakes_Properities($MasterID, $ItemID){
-            $tableCakes = 'order3';
-            $columns = 'order3.width, order3.height, order3.length, order3.layer, order3.phrase, order3.stuff, order1.shape, order1.levels ';
-            $condition = "order3 JOIN order1 ON order3.orderID = $MasterID AND order3.productID = $ItemID AND order1.ID = $ItemID;";
-            $rows = $this->quere->SelectFromTableByCondition($tableCakes, $columns, $condition);
-            return $rows; 
+            $sql = 'SELECT order3.width, order3.height, order3.length, order3.layer, order3.phrase, order3.stuff, order1.shape, order1.levels
+                    FROM order3 JOIN order1 ON order1.ID = ?
+                    WHERE order3.orderID = ? AND order3.productID = ?';
+            return $this->quere->run($sql, [$ItemID, $MasterID, $ItemID])->fetchAll(PDO::FETCH_ASSOC);
         }
-        
+
         public function Uploadfile($ID, $filename){
-            $tableItems = 'order1';
-            $columnsANDdata = "`file_name` = '$filename' ";
-            $condition = "WHERE ID = $ID";
-            $status = $this->quere->Update($tableItems, $columnsANDdata, $condition);
-            return $status;
+            return $this->quere->Update('order1', ['file_name' => $filename], ['ID' => $ID]);
         }
     }
     $Order = new Order();
@@ -290,7 +230,8 @@
             }
             elseif ($data['flag'] == 'download'){
                 $filename = $Order->Download($data['ID']);
-                $filename = $filename[0]['file_name'];
+                $filename = basename((string) ($filename[0]['file_name'] ?? ''));
+                if ($filename === '' || !is_file('../controller/uploads/' . $filename)) { http_response_code(404); exit; }
                 $fileUrl = '../controller/uploads/' . $filename;
                 $fileName = $filename;
 
@@ -300,11 +241,8 @@
                 // Set appropriate headers
                 $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-                if ($fileExtension === 'pdf') {
-                    $contentType = 'application/pdf';
-                } elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                    $contentType = 'image/jpeg'; // Update this based on the actual image types you support
-                }
+                $types = ['pdf' => 'application/pdf', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp'];
+                $contentType = $types[$fileExtension] ?? 'application/octet-stream';
                 header('Content-Type: '. $contentType);
                 header('Content-Disposition: attachment; filename="' . $fileName . '"');
                 header('Content-Length: ' . filesize($fileUrl));
@@ -314,21 +252,21 @@
             }
         }
         else{
-            if(isset($_FILES)) {
+            if(isset($_FILES['file'], $_POST['ID'])) {
                 $uploadDir = '../controller/uploads/';
-                $filename = "item" . $_POST['ID'];
+                // Only documents and images, never scripts.
+                $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'];
                 $fileExtension = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
-                $fileName = $filename . '.'. $fileExtension;
+                if (!in_array($fileExtension, $allowed, true)) {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'File type not allowed']);
+                    exit;
+                }
+                $fileName = 'item' . (int) $_POST['ID'] . '.' . $fileExtension;
                 $uploadFile = $uploadDir . $fileName;
-                // $isExist = $uploadDir . $filename;
-                // // Check if the file already exists
-                // if (file_exists($isExist)) {
-                //     unlink($isExist); // Delete the existing file
-                // }
-            
                 // Move the uploaded file to the uploads directory with the new name
                 if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
-                    $Order->Uploadfile($_POST['ID'], $fileName);
+                    $Order->Uploadfile((int) $_POST['ID'], $fileName);
                 } else {
                     http_response_code(500);
                     echo json_encode(['error' => 'Failed to move uploaded file']);

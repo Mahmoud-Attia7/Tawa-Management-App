@@ -6,6 +6,7 @@ import CakeItemModal from '../Modal/ModifyCakeItem';
 import NormalItemModal from '../Modal/ModifyNormalItem';
 import StuffedItemModal from '../Modal/ModifyStuffItem';
 import { useUser } from '../UserContext';
+import { API_BASE } from '../../apiConfig';
 
 const ShowItemTable = ({ status, hours, products, items, fetchItems, MasterID, Stuffing }) => {
     const [showCakeModal, setShowCakeModal] = useState(false);
@@ -68,7 +69,7 @@ const ShowItemTable = ({ status, hours, products, items, fetchItems, MasterID, S
           flag: 'get' 
         }
         try {
-          const response = await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', data);
+          const response = await axios.post(API_BASE + '/src/model/order.php', data);
           if((response.data).length != 0){
                 setCakeItem((prevState) => ({
                     ...prevState,
@@ -126,7 +127,7 @@ const ShowItemTable = ({ status, hours, products, items, fetchItems, MasterID, S
             formData.append('ID', itemID);
 
             try {
-                await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', formData, {
+                await axios.post(API_BASE + '/src/model/order.php', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -144,7 +145,7 @@ const ShowItemTable = ({ status, hours, products, items, fetchItems, MasterID, S
         };
 
         try {
-            const response = await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', data, {
+            const response = await axios.post(API_BASE + '/src/model/order.php', data, {
                 responseType: 'blob'
             });
 
@@ -176,7 +177,7 @@ const ShowItemTable = ({ status, hours, products, items, fetchItems, MasterID, S
         };
 
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', data);
+            await axios.post(API_BASE + '/src/model/order.php', data);
             fetchItems(MasterID);
         } catch (error) {
             console.error('Error deleting item:', error);
@@ -193,7 +194,7 @@ const ShowItemTable = ({ status, hours, products, items, fetchItems, MasterID, S
     const submitModifiedItem = async (data) => {
         try {
             console.log(data);
-            await axios.post('http://localhost/Tawa%20Management%20App/src/model/order.php', data);
+            await axios.post(API_BASE + '/src/model/order.php', data);
             fetchItems(MasterID);
             if (file != null) {
                 uploadFile(data.iID);

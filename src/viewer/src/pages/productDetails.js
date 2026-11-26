@@ -4,6 +4,7 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import ModifyProductModal from '../component/Modal/ModifyProduct';
+import { API_BASE } from '../apiConfig';
 
 
 const ProductDetails = () => {
@@ -30,7 +31,7 @@ const ProductDetails = () => {
 
     const fetchStuffing = async ()=>{
         try{
-            const stuffDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const stuffDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setStuffs(stuffDataResponse.data[4]);
         }
         catch(error){
@@ -44,7 +45,7 @@ const ProductDetails = () => {
                 productID: productID,
                 flag: 'get product stuffing'
             }
-            const productStuffingDataResponse = await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            const productStuffingDataResponse = await axios.post(API_BASE + '/src/controller/person.php', data);
             setProductStuffing(productStuffingDataResponse.data);
         }
         catch(error){
@@ -54,7 +55,7 @@ const ProductDetails = () => {
     
     const fetchCategories = async ()=>{
         try{
-            const areaDataResponse = await axios.get('http://localhost/Tawa%20Management%20App/src/controller/person.php');
+            const areaDataResponse = await axios.get(API_BASE + '/src/controller/person.php');
             setCategories(areaDataResponse.data[5]);
         }
         catch(error){
@@ -83,7 +84,7 @@ const ProductDetails = () => {
                     isAvailable:  isAvailable,
                     flag: 'update Product Stufing'
                 }
-                await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+                await axios.post(API_BASE + '/src/controller/person.php', data);
                 fetchProductStuffing(productData.ID);
             }
             else{
@@ -107,7 +108,7 @@ const ProductDetails = () => {
             return;
         }
         try {
-            await axios.post('http://localhost/Tawa%20Management%20App/src/controller/person.php', data);
+            await axios.post(API_BASE + '/src/controller/person.php', data);
             handleClose();
             updateProduct(data);
         } catch (error) {

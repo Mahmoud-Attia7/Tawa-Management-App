@@ -37,7 +37,7 @@ Special orders (custom cakes, large quantities, wedding orders) pass between the
 - **Frontend:** React (Create React App), React Router, React Bootstrap, Axios.
 - **Backend:** PHP with a controller/model structure exposing a JSON API.
 - **Database:** MySQL / MariaDB, 16 tables.
-- **Reports:** JasperReports through PHPJasper.
+- **Reports:** JasperReports through PHPJasper (needs Java; the free hosting of the live demo can't run it, so reports work when running locally).
 
 ### Data model
 
@@ -47,6 +47,7 @@ Special orders (custom cakes, large quantities, wedding orders) pass between the
 
 - Passwords are stored as bcrypt hashes (`password_hash`), and existing plain-text passwords are upgraded automatically on the next login.
 - Every API call (except sign-in) requires a signed, expiring login token sent in the `X-Auth-Token` header.
+- Write actions are also checked on the server against the user's permissions, so a read-only user gets `403` even when calling the API directly.
 - All database access goes through prepared statements with bound parameters (no SQL built from user input).
 - The API never returns password fields.
 - File uploads are limited to PDFs and images, and the uploads folder cannot run scripts.

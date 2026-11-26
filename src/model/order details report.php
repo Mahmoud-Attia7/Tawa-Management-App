@@ -35,12 +35,15 @@
                 'db_connection' => [
                     'driver' => 'mysql',
                     'username' => $db['username'],
-                    'password' => $db['password'],
                     'host' => $db['host'],
                     'port' => $db['port'],
                     'database' => $db['database'],
                 ]
             ];
+            // jasperstarter rejects an empty "-p", so only pass a password when there is one.
+            if ($db['password'] !== '') {
+                $options['db_connection']['password'] = $db['password'];
+            }
             $this->jasper->process($this->inputJasper, $outputWithFileName, $options)->execute();
             return true;
         }    

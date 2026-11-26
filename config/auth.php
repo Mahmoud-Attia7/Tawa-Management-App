@@ -34,22 +34,75 @@
         return (int) $data['uid'];
     }
 
-    // Stops the request with 401 unless it carries a valid token.
+    // Which permission (role name in user_role) each write action needs.
+    // Reads only need a valid login. Any one of the listed roles is enough.
+    const ORDER_WRITERS = ['write order', 'branch'];
+    const ORDER_WORKFLOW = ['write order', 'branch', 'relayer', 'cake', 'hala arabi', 'hala coffe', 'fatayer', 'red & chocolate'];
+
+    function required_roles($script, $flag) {
+        if ($script === 'order.php') {
+            // Item changes and uploads; 'get' and 'download' are reads.
+            return in_array($flag, ['get', 'download'], true) ? [] : ORDER_WORKFLOW;
+        }
+        $map = [
+            'insert' => ['write user'], 'delete' => ['write user'], 'update' => ['write user'],
+            'updateUserRoles' => ['write user'], 'update user branch' => ['write user'], 'update user area' => ['write user'],
+            'insert order' => ORDER_WRITERS,
+            'update order' => ORDER_WORKFLOW, 'Submited' => ORDER_WORKFLOW, 'Canceled' => ORDER_WORKFLOW,
+            'insert product' => ['write product'], 'update product' => ['write product'],
+            'delete product' => ['write product'], 'update Product Stufing' => ['write product'],
+            'insert category' => ['write category'], 'update category' => ['write category'], 'delete category' => ['write category'],
+            'insert stuff' => ['write stuff'], 'update stuff' => ['write stuff'], 'delete stuff' => ['write stuff'],
+            'insert branch' => ['write branchs'], 'update branch' => ['write branchs'], 'delete branch' => ['write branchs'],
+            'insert area' => ['write area'], 'update area' => ['write area'], 'delete area' => ['write area'],
+        ];
+        return $map[$flag] ?? [];
+    }
+
+    function user_has_any_role($userID, array $roles) {
+        require_once __DIR__ . '/database_quereies.php';
+        $placeholders = implode(', ', array_fill(0, count($roles), '?'));
+        $rows = (new Quere())->run(
+            "SELECT COUNT(*) AS n FROM `user_role` WHERE `userID` = ? AND `isAvailable` = 1 AND `roleName` IN ($placeholders)",
+            array_merge([$userID], $roles)
+        )->fetchAll(PDO::FETCH_ASSOC);
+        return ((int) $rows[0]['n']) > 0;
+    }
+
+    // Stops the request unless it carries a valid token (401) and the user
+    // has the permission the requested action needs (403).
     // Sign-in requests and CORS preflight checks are let through.
     function require_login() {
+        static $checked = false;
+        if ($checked) {
+            return;
+        }
+        $checked = true;
+
         if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
             http_response_code(204);
             exit;
         }
         $body = json_decode(file_get_contents('php://input'), true);
-        if (is_array($body) && ($body['flag'] ?? null) === 'sign in') {
+        $flag = is_array($body) ? ($body['flag'] ?? null) : null;
+        if ($flag === 'sign in') {
             return;
         }
         $token = $_SERVER['HTTP_X_AUTH_TOKEN'] ?? ($_POST['token'] ?? null);
-        if (verify_token($token) === null) {
+        $userID = verify_token($token);
+        if ($userID === null) {
             http_response_code(401);
             echo json_encode(['error' => 'Not logged in']);
             exit;
+        }
+        if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+            $script = basename($_SERVER['SCRIPT_FILENAME'] ?? '');
+            $roles = required_roles($script, $flag);
+            if ($roles && !user_has_any_role($userID, $roles)) {
+                http_response_code(403);
+                echo json_encode(['error' => 'You do not have permission for this action']);
+                exit;
+            }
         }
     }
 ?>

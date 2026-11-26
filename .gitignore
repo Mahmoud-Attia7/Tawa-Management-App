@@ -1,0 +1,4 @@
+/src/model/vendor/
+node_modules/
+/src/viewer/build/
+.env

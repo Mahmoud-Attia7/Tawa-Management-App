@@ -1,0 +1,74 @@
+/* General Sidebar Styling */
+.bg-light {
+    background-color: #f8f9fa!important; /* Light background color */
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 150px; /* Sidebar width */
+    height: 100%;
+    overflow: auto; /* Enables scrolling if the page is longer than the viewport */
+    box-shadow: 7px 0px 5px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    padding-top: 20px;
+}
+
+/* Adjust padding for content wrapper */
+#page-content-wrapper {
+    margin-right: 150px; /* Equal to sidebar width */
+    padding: 20px;
+}
+
+/* Navigation Link Styling */
+.nav-link {
+    margin: 10px 15px;
+    border-radius: 5px; /* Rounded corners for the links */
+    color: #007bff; /* Primary link color */
+    font-weight: 500;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    
+}
+
+.nav-link:hover, .nav-link:focus {
+    color: #0056b3; /* Darker blue on hover/focus */
+    background-color: #e7e7e7; /* Light grey background on hover/focus */
+    text-decoration: none; /* Removes underline from links */
+}
+
+/* Active Link Styling */
+.nav-link.active {
+    color: #fff;
+    background-color: #007bff; /* Bootstrap primary color for active state */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative; /* Adjust position for small screens */
+    }
+    #page-content-wrapper {
+        margin-right: 0;
+    }
+    .sidebar-sticky {
+        position: static;
+    }
+}
+
+/* Sticky sidebar content */
+.sidebar-sticky {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 0; /* Stick to top of sidebar */
+}
+
+.sticky-bottom {
+    position: fixed; /* Fix position to the bottom of the viewport */
+    bottom: 0; /* Align at the bottom */
+    z-index: 1000; /* Optional: Ensure it stays on top of other content */
+    width: 150px; /* Sidebar width */
+
+  }
+  
